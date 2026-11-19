@@ -177,7 +177,7 @@ levelTrack.addEventListener('ended',function(){
   }
 });
 function syncLevelTrack(){
-  if(!trackReady||trackFailed||!mus)return;
+  if(!trackReady||trackFailed||!mus||document.hidden||menuOn||!(st==='jugando'||st==='nivel'||st==='mundo'))return;
   var pitch=Math.max(.88,Math.min(1.20,.88+Math.max(0,wi)*.02));
   levelTrack.playbackRate=pitch;
   levelTrack.volume=Math.max(0,Math.min(1,vol*.55));
@@ -208,27 +208,29 @@ function sched(){var a=AC;if(!a||!mus||!MT||a.state!=='running')return;var sd=60
 function stopSynthMusic(){
   if(mTimer){clearInterval(mTimer);mTimer=null;}
 }
-function musicStart(){
-  stopSynthMusic();
-  if(!mus||trackFailed||st==='pausa')return;
-  if(trackReady&&(st==='jugando'||st==='nivel'||st==='mundo')){
-    syncLevelTrack();
-  }
-}
+var menuTrack=new Audio('assets/Menu%20Loop.mp3'),overTrack=new Audio('assets/Game%20Over%20(1).mp3');
+menuTrack.loop=true;overTrack.loop=false;
+var audioState='',audioDeathPlayed=false;
 function musicTheme(){
-  stopSynthMusic();
-  if(!mus||st==='pausa'){
-    if(!levelTrack.paused)levelTrack.pause();
-    return;
-  }
-  if(st==='jugando'||st==='nivel'||st==='mundo'){
-    syncLevelTrack();
-  }
+ stopSynthMusic();
+ var mode=!mus||document.hidden?'off':st==='pausa'?'off':menuOn||st==='inicio'?'menu':st==='fin'&&!win?'over':(st==='jugando'||st==='nivel'||st==='mundo')?'game':'off';
+ if(st!=='fin')audioDeathPlayed=false;
+ if(mode!==audioState){
+   levelTrack.pause();menuTrack.pause();overTrack.pause();
+   if(mode==='menu'&&audioState!=='off')menuTrack.currentTime=0;
+   if(mode==='over'&&!audioDeathPlayed)overTrack.currentTime=0;
+   audioState=mode;
+ }
+ var v=Math.max(0,Math.min(1,vol*.55));menuTrack.volume=overTrack.volume=v;
+ if(mode==='game'){syncLevelTrack();levelTrack.volume=v*(revT>0?.22:1);}
+ else if(mode==='menu'&&menuTrack.paused){var p=menuTrack.play();if(p&&p.catch)p.catch(function(){});}
+ else if(mode==='over'&&!audioDeathPlayed){audioDeathPlayed=true;var q=overTrack.play();if(q&&q.catch)q.catch(function(){audioDeathPlayed=false;});}
 }
+function musicStart(){musicTheme();}
 function lblMus(){document.getElementById('m-mus').textContent='M\\u00fasica: '+(mus?'S\\u00ed':'No');}
 function musToggle(){
   mus=!mus;try{localStorage.setItem('galaga-mus',mus?'1':'0');}catch(e){}
-  if(mus)musicStart();else{levelTrack.pause();stopSynthMusic();}
+  musicTheme();
   lblMus();
 }
 function mute(){snd=!snd;try{localStorage.setItem('galaga-snd',snd?'1':'0');}catch(e){}lblSnd();if(snd)tone(660,.08,'triangle',.08);}
@@ -407,7 +409,7 @@ function start(cont,w0){
   if(cont&&save){wi=save.wi;li=save.li;vidas=Math.min(maxL(),save.vidas);pts=save.pts;tot=Math.min(totemCap(),save.tot||0);nx=save.nx||0;nextLife=save.nl||(Math.floor(pts/300)+1)*300;}
   else{wi=w0||0;li=0;vidas=3;tot=0;nx=0;pts=0;nextLife=300;save=null;sv();}
   startBest=best;win=false;sx=W/2;ens=[];pu=[];coinFly=[];mis=[];tm.sh=tm.mu=tm.ra=tm.mi=0;miCd=0;spT=8;st='mundo';msgT=2.4;if(!storySeen){storySeen=true;try{localStorage.setItem('galaga-story','1');}catch(e){}sv();st='cine';cineK=1;cineT=0;}}
-function terminar(w){win=w;st='fin';save=null;finT=4;sv();if(w)SFX.win();else SFX.over();}
+function terminar(w){win=w;st='fin';musicTheme();save=null;finT=4;sv();if(w)SFX.win();else SFX.over();}
 function act(){if(menuOn)return;if(st==='cine'){skipCine();return;}if(st==='inicio'||st==='fin'){start(true);musicStart();}else if(st==='pausa'){st='jugando';musicStart();}else musicStart();}
 function pausa(){if(menuOn)menuClose();else menuOpen();}
 function boom(x,y,c,n){for(var i=0;i<(n||14);i++){var a=R(0,6.28),v=R(40,160);
@@ -452,7 +454,7 @@ function lblSnd(){bSnd.textContent='Efectos: '+(snd?'Sí':'No');}
 function inGame(){return st==='jugando'||st==='pausa'||st==='nivel'||st==='mundo';}
 function showView(v){['home','worlds','shop','pause'].forEach(function(k){document.getElementById('v-'+k).style.display=k===v?'flex':'none';});}
 function refreshHome(){document.getElementById('home-info').textContent='Monedas: '+profile.coins+' • Balas '+profile.bullets+'/6 • Tótems '+profile.totemLevel+'/3';}
-function menuOpen(){if(menuOn)return;menuOn=true;if(st==='jugando'||st==='nivel'||st==='mundo'){prevSt=st;st='pausa';levelTrack.pause();showView('pause');}else{prevSt=null;showView('home');}stopSynthMusic();lblSnd();lblMus();lblCtl();vEl.value=Math.round(vol*100);refreshHome();mEl.classList.add('on');}
+function menuOpen(){if(menuOn)return;menuOn=true;if(st==='jugando'||st==='nivel'||st==='mundo'){prevSt=st;st='pausa';levelTrack.pause();showView('pause');}else{prevSt=null;showView('home');}musicTheme();lblSnd();lblMus();lblCtl();vEl.value=Math.round(vol*100);refreshHome();mEl.classList.add('on');}
 function menuClose(skip){menuOn=false;mEl.classList.remove('on');if(!skip&&prevSt&&st==='pausa')st=prevSt;prevSt=null;if(st==='jugando'||st==='nivel'||st==='mundo')musicStart();}
 function buildWorlds(target){var dest=document.getElementById(target||'worlds');dest.innerHTML='';for(var i=0;i<=Math.min(maxW+1,60);i++)(function(i){var b=document.createElement('button');b.textContent=(i+1)+'. '+wname(i);b.disabled=i>maxW;b.addEventListener('click',function(){if(i>maxW)return;menuClose(true);save=null;start(false,i);});dest.appendChild(b);})(i);}
 function shopRender(){var box=document.getElementById('shop-items');box.innerHTML='';document.getElementById('shop-coins').textContent='Monedas: '+profile.coins;
