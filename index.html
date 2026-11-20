@@ -260,11 +260,20 @@ button:has(i){gap:3px}
   font-family:MinecraftFive,Georgia,serif!important;
   font-size:inherit!important;
   line-height:1!important;
-  transform:scaleX(.62) scaleY(.82)!important;
+  transform:scaleX(.70) scaleY(.90)!important;
   transform-origin:center center!important;
 }
 @media(max-width:420px){
   #auth-screen .auth-card #auth-login{font-size:15px!important}
+}
+
+/* Aumenta ligeramente también el texto de Crear cuenta */
+#auth-screen .auth-card #auth-register{
+  font-size:13px!important;
+  letter-spacing:0!important;
+}
+@media(max-width:420px){
+  #auth-screen .auth-card #auth-register{font-size:12px!important}
 }
 </style>
 </head>
