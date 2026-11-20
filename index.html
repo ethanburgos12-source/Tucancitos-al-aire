@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="game-version" content="1.1.0">
+<meta name="game-version" content="1.1.1">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tucansitos al aire</title>
 <style>
@@ -209,7 +209,7 @@ function stopSynthMusic(){
   if(mTimer){clearInterval(mTimer);mTimer=null;}
 }
 var menuTrack=new Audio('assets/Menu%20Loop.mp3'),overTrack=new Audio('assets/Game%20Over%20(1).mp3');
-menuTrack.loop=true;overTrack.loop=false;
+menuTrack.loop=true;overTrack.loop=false;overTrack.preload='auto';
 var audioState='',audioDeathPlayed=false;
 function musicTheme(){
  stopSynthMusic();
@@ -218,7 +218,7 @@ function musicTheme(){
  if(mode!==audioState){
    levelTrack.pause();menuTrack.pause();overTrack.pause();
    if(mode==='menu'&&audioState!=='off')menuTrack.currentTime=0;
-   if(mode==='over'&&!audioDeathPlayed)overTrack.currentTime=0;
+   if(mode==='over'&&!audioDeathPlayed){try{overTrack.currentTime=0;}catch(e){}}
    audioState=mode;
  }
  var v=Math.max(0,Math.min(1,vol*.55));menuTrack.volume=overTrack.volume=v;
@@ -409,8 +409,8 @@ function start(cont,w0){
   if(cont&&save){wi=save.wi;li=save.li;vidas=Math.min(maxL(),save.vidas);pts=save.pts;tot=Math.min(totemCap(),save.tot||0);nx=save.nx||0;nextLife=save.nl||(Math.floor(pts/300)+1)*300;}
   else{wi=w0||0;li=0;vidas=3;tot=0;nx=0;pts=0;nextLife=300;save=null;sv();}
   startBest=best;win=false;sx=W/2;ens=[];pu=[];coinFly=[];mis=[];tm.sh=tm.mu=tm.ra=tm.mi=0;miCd=0;spT=8;st='mundo';msgT=2.4;if(!storySeen){storySeen=true;try{localStorage.setItem('galaga-story','1');}catch(e){}sv();st='cine';cineK=1;cineT=0;}}
-function terminar(w){win=w;st='fin';musicTheme();save=null;finT=4;sv();if(w)SFX.win();else SFX.over();}
-function act(){if(menuOn)return;if(st==='cine'){skipCine();return;}if(st==='inicio'||st==='fin'){start(true);musicStart();}else if(st==='pausa'){st='jugando';musicStart();}else musicStart();}
+function terminar(w){win=w;st='fin';levelTrack.pause();menuTrack.pause();audioDeathPlayed=false;musicTheme();save=null;finT=4;sv();if(w)SFX.win();else SFX.over();}
+function act(){if(menuOn)return;if(st==='cine'){skipCine();return;}if(st==='fin')return;if(st==='inicio'){start(true);musicStart();}else if(st==='pausa'){st='jugando';musicStart();}else musicStart();}
 function pausa(){if(menuOn)menuClose();else menuOpen();}
 function boom(x,y,c,n){for(var i=0;i<(n||14);i++){var a=R(0,6.28),v=R(40,160);
   parts.push({x:x,y:y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,l:R(.3,.7),c:c});}}
@@ -488,7 +488,7 @@ setCtl(ctl);
 vEl.addEventListener('input',function(){vol=vEl.value/100;if(MG)MG.gain.value=vol;levelTrack.volume=Math.max(0,Math.min(1,vol*.55));try{localStorage.setItem('galaga-vol',String(vol));}catch(e){}tone(660,.06,'triangle',.08);});
 lblSnd();
 var drag=null,tgt=null;
-cv.addEventListener('pointerdown',function(e){if(grapple){var rr=cv.getBoundingClientRect(),px=(e.clientX-rr.left)*W/rr.width,py=(e.clientY-rr.top)*H/rr.height;if(px>=W/2-82&&px<=W/2+82&&py>=H/2+112&&py<=H/2+160)resolveGrapple();return;}if(st==='nivel'){var rr=cv.getBoundingClientRect(),px=(e.clientX-rr.left)*W/rr.width,py=(e.clientY-rr.top)*H/rr.height;if(px>=W/2-72&&px<=W/2+72&&py>=H-78&&py<=H-24){msgT=0;return;}}act();if(ctl!=='touch'||menuOn)return;drag={x:e.clientX,sx:sx};tgt=sx;try{cv.setPointerCapture(e.pointerId);}catch(x){}});
+cv.addEventListener('pointerdown',function(e){if(grapple){var rr=cv.getBoundingClientRect(),px=(e.clientX-rr.left)*W/rr.width,py=(e.clientY-rr.top)*H/rr.height;if(px>=W/2-82&&px<=W/2+82&&py>=H/2+112&&py<=H/2+160)resolveGrapple();return;}if(st==='fin'){if(menuOn)return;var fr=cv.getBoundingClientRect(),fx=(e.clientX-fr.left)*W/fr.width,fy=(e.clientY-fr.top)*H/fr.height;if(fx>=W/2-100&&fx<=W/2+100&&fy>=H-78&&fy<=H-30){ac();start(false);musicStart();}return;}if(st==='nivel'){var rr=cv.getBoundingClientRect(),px=(e.clientX-rr.left)*W/rr.width,py=(e.clientY-rr.top)*H/rr.height;if(px>=W/2-72&&px<=W/2+72&&py>=H-78&&py<=H-24){msgT=0;return;}}act();if(ctl!=='touch'||menuOn)return;drag={x:e.clientX,sx:sx};tgt=sx;try{cv.setPointerCapture(e.pointerId);}catch(x){}});
 cv.addEventListener('pointermove',function(e){if(!drag)return;var r=cv.getBoundingClientRect();tgt=Math.max(20,Math.min(W-20,drag.sx+(e.clientX-drag.x)*W/r.width*1.3));});
 ['pointerup','pointercancel'].forEach(function(n){cv.addEventListener(n,function(){drag=null;tgt=null;});});
 document.addEventListener('visibilitychange',function(){if(document.hidden&&st==='jugando')menuOpen();try{if(AC){if(document.hidden)AC.suspend();else AC.resume();}}catch(e){}});
@@ -526,7 +526,7 @@ function update(dt){shk=Math.max(0,shk-dt);boil(dt);musicTheme();if(mG)mG.gain.v
     }
     return;
   }
-  if(st==='fin'&&!win&&!menuOn){finT-=dt;if(finT<=0){start(false);return;}}
+  
   if(st!=='jugando')return;
   if(grapple){if(grapple.frozen===null)grapple.elapsed+=dt;return;}
    if(revT>0){revT-=dt;return;}
@@ -810,7 +810,7 @@ function draw(){g=gl;var so=shk>0?shk*14:0;g.setTransform(.5,0,0,.5,(Math.random
     txt(win?'¡Completaste los 8 mundos!':'Fin del juego',H/2-30,21,win?'#43d17a':'#ff6b6b');
     if(!win)txt('Mundo '+(wi+1)+' · Nivel '+(li+1),H/2,13);
     txt('Puntuación final: '+pts,H/2+30,15);txt(best>startBest?'¡Nuevo récord guardado!':'Récord: '+best,H/2+58,14,'#ffd23f');
-    txt(win?'Toca para jugar otra vez':'Toca para volver al mundo 1',H/2+92,11,'#bbb');
+    g.fillStyle='#263238';g.fillRect(W/2-100,H-78,200,48);g.fillStyle='#ffd23f';g.fillRect(W/2-97,H-75,194,42);g.fillStyle='#263238';g.fillRect(W/2-94,H-72,188,36);txt('JUGAR DE NUEVO',H-49,14,'#fff');
   }
 }
 
