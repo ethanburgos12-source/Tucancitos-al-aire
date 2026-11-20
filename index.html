@@ -217,6 +217,31 @@ button:has(i){gap:3px}
 @media(max-width:400px){
  #auth-screen #auth-login{font-size:10px!important;width:84%!important;max-width:84%!important}
 }
+
+/* Mantener la textura original y encajar el texto completo */
+#auth-screen .auth-card #auth-login{
+  flex:none!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  min-height:46px!important;
+  margin:0!important;
+  padding:0 16px!important;
+  box-sizing:border-box!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background-position:center 0%!important;
+  font-family:MinecraftFive,Georgia,serif!important;
+  font-size:clamp(8px,2vw,11px)!important;
+  font-weight:400!important;
+  letter-spacing:-.7px!important;
+  line-height:1!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:clip!important;
+}
 </style>
 </head>
 <body>
@@ -226,7 +251,7 @@ button:has(i){gap:3px}
     <p id="auth-message">Inicia sesión o crea una cuenta para guardar tu progreso.</p>
     <label>Nombre de usuario<input id="auth-username" type="text" maxlength="16" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Tu usuario"></label>
     <label>Contraseña<input id="auth-password" type="password" maxlength="128" autocomplete="current-password" placeholder="Tu contraseña"></label>
-    <button id="auth-login" type="button" aria-label="Iniciar sesión">ENTRAR</button>
+    <button id="auth-login" type="button" aria-label="Iniciar sesión">Iniciar sesión</button>
     <button id="auth-register" type="button">Crear cuenta</button>
     <p class="auth-help">Usuario: 3–16 letras, números o _. Contraseña: mínimo 8 caracteres.</p>
   </div>
