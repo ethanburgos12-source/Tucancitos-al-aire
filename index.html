@@ -172,6 +172,25 @@ button:has(i){gap:3px}
   #auth-screen #auth-register{font-size:11px!important}
 }
 
+
+/* Ajuste final de autenticación: etiquetas cortas y contenidas */
+#auth-screen #auth-login,
+#auth-screen #auth-register{
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  padding:4px 8px!important;
+  line-height:1!important;
+}
+#auth-screen #auth-login{font-size:9px!important;letter-spacing:-.5px!important}
+#auth-screen #auth-register{font-size:10px!important;letter-spacing:-.4px!important}
 </style>
 </head>
 <body>
@@ -181,7 +200,7 @@ button:has(i){gap:3px}
     <p id="auth-message">Inicia sesión o crea una cuenta para guardar tu progreso.</p>
     <label>Nombre de usuario<input id="auth-username" type="text" maxlength="16" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Tu usuario"></label>
     <label>Contraseña<input id="auth-password" type="password" maxlength="128" autocomplete="current-password" placeholder="Tu contraseña"></label>
-    <button id="auth-login" type="button">Iniciar sesión</button>
+    <button id="auth-login" type="button" aria-label="Iniciar sesión">ENTRAR</button>
     <button id="auth-register" type="button">Crear cuenta</button>
     <p class="auth-help">Usuario: 3–16 letras, números o _. Contraseña: mínimo 8 caracteres.</p>
   </div>
