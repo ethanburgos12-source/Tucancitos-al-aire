@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="game-version" content="1.1.1">
+<meta name="game-version" content="1.1.2">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tucansitos al aire</title>
 <style>
@@ -810,7 +810,7 @@ function draw(){g=gl;var so=shk>0?shk*14:0;g.setTransform(.5,0,0,.5,(Math.random
     txt(win?'¡Completaste los 8 mundos!':'Fin del juego',H/2-30,21,win?'#43d17a':'#ff6b6b');
     if(!win)txt('Mundo '+(wi+1)+' · Nivel '+(li+1),H/2,13);
     txt('Puntuación final: '+pts,H/2+30,15);txt(best>startBest?'¡Nuevo récord guardado!':'Récord: '+best,H/2+58,14,'#ffd23f');
-    g.fillStyle='#263238';g.fillRect(W/2-100,H-78,200,48);g.fillStyle='#ffd23f';g.fillRect(W/2-97,H-75,194,42);g.fillStyle='#263238';g.fillRect(W/2-94,H-72,188,36);txt('JUGAR DE NUEVO',H-49,14,'#fff');
+    g.fillStyle='#263238';g.fillRect(W/2-100,H-78,200,48);g.fillStyle='#ffd23f';g.fillRect(W/2-97,H-75,194,42);g.fillStyle='#263238';g.fillRect(W/2-94,H-72,188,36);txt('JUGAR DE NUEVO',H-49,10,'#fff');
   }
 }
 
