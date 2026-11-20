@@ -191,6 +191,32 @@ button:has(i){gap:3px}
 }
 #auth-screen #auth-login{font-size:9px!important;letter-spacing:-.5px!important}
 #auth-screen #auth-register{font-size:10px!important;letter-spacing:-.4px!important}
+
+/* Botón de acceso: texto compacto dentro del centro de la textura */
+#auth-screen #auth-login{
+  width:86%!important;
+  max-width:86%!important;
+  min-height:48px!important;
+  margin:0 auto!important;
+  padding:0 12px!important;
+  box-sizing:border-box!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background-position:center 0%!important;
+  font-family:Arial,sans-serif!important;
+  font-size:12px!important;
+  font-weight:900!important;
+  letter-spacing:.5px!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:clip!important;
+  text-shadow:none!important;
+}
+@media(max-width:400px){
+ #auth-screen #auth-login{font-size:10px!important;width:84%!important;max-width:84%!important}
+}
 </style>
 </head>
 <body>
