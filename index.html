@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="game-version" content="1.1.3">
+<meta name="game-version" content="1.1.4">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tucansitos al aire</title>
 <style>
@@ -242,6 +242,30 @@ button:has(i){gap:3px}
   overflow:hidden!important;
   text-overflow:clip!important;
 }
+
+/* Ajuste real del rótulo: conserva la fuente pixelada y la textura original */
+#auth-screen .auth-card #auth-login{
+  background-position:center 0%!important;
+  font-family:MinecraftFive,Georgia,serif!important;
+  font-size:16px!important;
+  letter-spacing:0!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+}
+#auth-screen .auth-card #auth-login .auth-login-text{
+  display:inline-block!important;
+  flex:none!important;
+  max-width:100%!important;
+  white-space:nowrap!important;
+  font-family:MinecraftFive,Georgia,serif!important;
+  font-size:inherit!important;
+  line-height:1!important;
+  transform:scaleX(.62) scaleY(.82)!important;
+  transform-origin:center center!important;
+}
+@media(max-width:420px){
+  #auth-screen .auth-card #auth-login{font-size:15px!important}
+}
 </style>
 </head>
 <body>
@@ -251,7 +275,7 @@ button:has(i){gap:3px}
     <p id="auth-message">Inicia sesión o crea una cuenta para guardar tu progreso.</p>
     <label>Nombre de usuario<input id="auth-username" type="text" maxlength="16" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Tu usuario"></label>
     <label>Contraseña<input id="auth-password" type="password" maxlength="128" autocomplete="current-password" placeholder="Tu contraseña"></label>
-    <button id="auth-login" type="button" aria-label="Iniciar sesión">Iniciar sesión</button>
+    <button id="auth-login" type="button" aria-label="Iniciar sesión"><span class="auth-login-text">Iniciar sesión</span></button>
     <button id="auth-register" type="button">Crear cuenta</button>
     <p class="auth-help">Usuario: 3–16 letras, números o _. Contraseña: mínimo 8 caracteres.</p>
   </div>
