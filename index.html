@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="game-version" content="1.1.6">
+<meta name="game-version" content="1.1.7">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tucansitos al aire</title>
 <style>
@@ -275,6 +275,54 @@ button:has(i){gap:3px}
 @media(max-width:420px){
   #auth-screen .auth-card #auth-register{font-size:12px!important}
 }
+
+/* Diseño original del marco azul aplicado también a inicio de sesión */
+#auth-screen{
+  background:#172044 url('assets/marco-azul.png?v=1.1.7') center center / min(164vw,100dvh) auto no-repeat!important;
+}
+#auth-screen .auth-card{
+  width:min(82vw,320px)!important;
+  max-height:82dvh!important;
+  overflow:auto!important;
+  padding:14px 10px 18px!important;
+  gap:9px!important;
+  background:transparent!important;
+  color:#fff!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  text-shadow:1px 2px 3px #101735!important;
+}
+#auth-screen .auth-card h1,
+#auth-screen .auth-card p,
+#auth-screen .auth-card label{
+  color:#fff!important;
+  text-shadow:1px 2px 3px #101735!important;
+}
+#auth-screen .auth-card input{
+  min-height:38px!important;
+  background:rgba(245,248,255,.94)!important;
+  border:2px solid #d6bd78!important;
+  border-radius:5px!important;
+}
+#auth-screen .auth-card button{
+  width:100%!important;
+  min-height:42px!important;
+  margin:0!important;
+}
+#menu{
+  background-image:url('assets/marco-azul.png?v=1.1.7')!important;
+  background-size:min(164vw,100dvh) auto!important;
+}
+#menu .card{
+  width:min(82vw,320px)!important;
+  max-height:82dvh!important;
+}
+@media (orientation:landscape){
+  #auth-screen{background-size:min(100dvh,164vw) auto!important}
+  #menu{background-size:min(100dvh,164vw) auto!important}
+}
+
 </style>
 </head>
 <body>
